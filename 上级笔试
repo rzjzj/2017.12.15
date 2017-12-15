@@ -1,0 +1,215 @@
+1.网站访问
+1.1如何获取每日top10的访问来源城市
+   根据当前用户本地IP地址，查询IP地址库，获取IP所在的省市信息。
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>MJBlog(mj.588cy.com)</title>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script><script type="text/javascript">
+$(document).ready(function(){
+
+//通过调用新浪IP地址库接口查询用户当前所在国家、省份、城市、运营商信息
+$.getScript('http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js',function(){
+   $(".country").html(remote_ip_info.country);
+   $(".province").html(remote_ip_info.province);
+   $(".city").html(remote_ip_info.city);
+   $(".isp").html(remote_ip_info.isp);
+   });
+//通过调用QQIP地址库接口查询本机当前的IP地址
+$.getScript('http://fw.qq.com/ipaddress',function(){
+   $(".ip").html(IPData[0]); 
+   });
+});
+</script>
+</head>
+<body>
+<div>国家：<span class="country"></span></div>
+
+<div>省份：<span class="province"></span></div>
+<div>城市：<span class="city"></span></div>
+<div>IP地址：<span class="ip"></span></div>
+<div>运营商：<span class="isp"></span></div>
+</body>
+
+1.2如何获取访问者浏览器信息
+  用户访问服务器时，利用PHP的超级全局变量$_SERVER数组中字段['HTTP_USER_AGENT']获取访问用户的所有信息和['HTTP_ACCEPT_LANGUAGE']获取访问用户浏览器的语言。
+   // 获取当前请求的 User-Agent: 头部的内容。
+  $_SERVER['HTTP_USER_AGENT']; // 当前返回结果：Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36
+
+  // 获取当前请求的 Accept-Language: 头部的内容。
+  $_SERVER['HTTP_ACCEPT_LANGUAGE'];  // 当前返回结果：zh-CN,zh;q=0.8
+
+  // 利用正则表达式匹配以上字符串，用户的浏览器操作系统信息。
+s
+  /**
+   * 获得访客操作系统
+   */
+  function get_os() {      if (!empty($_SERVER['HTTP_USER_AGENT'])) {
+          $os = $_SERVER['HTTP_USER_AGENT'];          if (preg_match('/win/i', $os)) {
+              $os = 'Windows';
+          } else if (preg_match('/mac/i', $os)) {
+              $os = 'MAC';
+          } else if (preg_match('/linux/i', $os)) {
+              $os = 'Linux';
+          } else if (preg_match('/unix/i', $os)) {
+              $os = 'Unix';
+          } else if (preg_match('/bsd/i', $os)) {
+              $os = 'BSD';
+          } else {
+              $os = 'Other';
+          }
+          return $os;
+      } else {
+         return 'unknow';
+      }
+  }
+  
+  /**
+   * 获得访问者浏览器
+   */
+  function browse_info() {
+      if (!empty($_SERVER['HTTP_USER_AGENT'])) {
+          $br = $_SERVER['HTTP_USER_AGENT'];
+          if (preg_match('/MSIE/i', $br)) {
+              $br = 'MSIE';
+          } else if (preg_match('/Firefox/i', $br)) {
+              $br = 'Firefox';
+          } else if (preg_match('/Chrome/i', $br)) {
+              $br = 'Chrome';
+          } else if (preg_match('/Safari/i', $br)) {
+              $br = 'Safari';
+          } else if (preg_match('/Opera/i', $br)) {
+              $br = 'Opera';
+          } else {
+              $br = 'Other';
+          }
+          return $br;
+      } else {
+          return 'unknow';
+      }
+  }
+
+  /**
+   * 获得访问者浏览器语言
+   */
+    function get_lang() {
+        if (!empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+            $lang = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+            $lang = substr($lang, 0, 5);
+            if (preg_match('/zh-cn/i',$lang)) {
+                $lang = '简体中文';
+            } else if (preg_match('/zh/i',$lang)) {
+              $lang = '繁体中文';
+          } else {
+
+$lang = 'English';
+          }
+          return $lang;
+      } else {
+          return 'unknow';
+      }
+  }
+2.给出一个整数数组，以及一个目标数字，在数组中找出两个数字相加等于目标数字。
+首先对数组进行排序，然后令i = 0，j = n-1，看arr[i] + arr[j] 是否等于Sum，如果是，则结束。如果小于Sum，则i = i + 1；如果大于Sum，则 j = j – 1。
+      这样只需要在排好序的数组上遍历一次，就可以得到最后的结果。
+int getSumNum(int[] arr,int Sum)，   //arr为数组，Sum为和   
+{  
+    int i,j;      for(i = 0, j = n-1; i < j ; )  
+    {  
+        if(arr[i] + arr[j] == Sum)  
+            return ( i , j );  
+        else if(arr[i] + arr[j] < Sum)  
+            i++;  
+        else  
+            j--;  
+    }      return ( -1 , -1 );  
+}  
+3.给出一个指定数字，获取二进制序列。
+#include<stdio.h>
+  void main()
+  {   
+   int a[32],x,i,m;
+    int change(int x,int a[]);//函数声明
+     scanf("%d",&x);
+    m=change(x,a); 
+    for(i=0;i<m;i++)
+      printf("%d",a[i]);
+  }
+   int change(int x,int a[])//要函数声明致所面要填int x,int a[]
+  {   
+    int n=0,t,k;
+     do {   a[n]=x%2;
+            x=(unsigned int)x>>1;
+            n++;
+         }while(x!=0);
+      for(k=0;k<n/2;k++){
+       t=a[k];
+       a[k]=a[n-k-1];//实现数组2数交换
+       a[n-k-1]=t;
+ }
+    return  n;//返值数
+ 4.寻路
+ 可能的路径一共有C（n+m,n）种。
+ #include <cmath>
+#include <iostream>
+#include <cstring>
+#include "minmax.h"
+#include <cstdio>
+
+using namespace std ;
+
+#define LL long long
+#define p 1000000007
+
+LL n, m;
+
+LL quick_mod(LL a, LL b)
+{
+	LL ans = 1;
+	a %= p;
+	while (b)
+	{
+		if (b & 1)
+		{
+			ans = ans * a % p;
+			b--;
+		}
+		b >>= 1;
+		a = a * a % p;
+	}
+	return ans;
+}
+
+LL C(LL n, LL m)
+{
+	if (m > n) return 0;
+	LL ans = 1;
+	for (int i = 1; i <= m; i++)
+	{
+		LL a = (n + i - m) % p;
+		LL b = i % p;
+		ans = ans * (a * quick_mod(b, p - 2) % p) % p;
+	}
+	return ans;
+}
+
+LL Lucas(LL n, LL m)
+{
+	if (m == 0) return 1;
+	return C(n % p, m % p) * Lucas(n / p, m / p) % p;
+}
+
+int main()
+{
+	while (cin>>n>>m)
+	{
+		LL a = n + m - 2;
+		LL b = min(n, m) - 1;
+		printf(Lucas(a,b));
+	}
+	return 0;
+}
+ 
+
+
+
